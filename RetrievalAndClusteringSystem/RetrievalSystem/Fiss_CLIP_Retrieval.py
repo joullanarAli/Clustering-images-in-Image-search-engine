@@ -7,7 +7,7 @@ import pandas as pd
 import torch
 from RetrievalAndClusteringSystem.Indexing.faiss_indexer import faiss_indexer
 from RetrievalAndClusteringSystem.DatasetReader.FlickrDataset import FlickrDataset_reader
-
+from RetrievalAndClusteringSystem.constants_paths import IMAGE_EMBEDDINGS
 class Faiss_CLIP_Retrieval(IRetrieval):
 
     def __init__(self,distance_metrice):
@@ -15,7 +15,7 @@ class Faiss_CLIP_Retrieval(IRetrieval):
         self.embedder = 'clip'
 
     def search(self, query,k=300):
-        self.image_embeddings = torch.load('RetrievalAndClusteringSystem\\image_embeddings.pt')
+        self.image_embeddings = torch.load(IMAGE_EMBEDDINGS)
         clip_model = CLIP_reader()
         processor, model = clip_model.readModel()
         
@@ -44,19 +44,32 @@ class Faiss_CLIP_Retrieval(IRetrieval):
         self.retrieved = sorted_df.head(k)
         return similarities, self.retrieved, self.image_embeddings
     
+    def get_nearest_images_cos_sim(self, query,top_k,threshold):
+        k=2
+        self.similarities = []
+        self.retrieved= []
+        self.image_embeddings=[]
+        self.difference = 1
+        while self.difference > threshold and k<top_k:
+            del self.similarities, self.retrieved,self.image_embeddings
+            k= k+1
+            self.similarities, self.retrieved, self.image_embeddings = self.search(query, k) 
+            self.difference = self.similarities[k-1]/self.similarities[0] 
+        return self.similarities, self.retrieved, self.image_embeddings
+
+
     def evaluate_retrieval_blip_caption(self,df, threshold,top_k=10):
         all_precisions = []
         all_recalls = []
         
         unique_images = df['image'].unique()
         
-        # Iterate over each unique image to evaluate using only the blip_caption
+        # Iterate over each unique image to evaluate using the blip_caption
         for image in unique_images:
             # Get the BLIP caption for this image
             blip_caption = df[df['image'] == image]['blip_caption'].iloc[0]
             
             # Perform the search with the BLIP caption
-            #retrieved_images, _ = self.search(query=blip_caption,k=top_k)
             similarities, retrieved_images, image_embeddings= self.get_nearest_images_cos_sim(query=blip_caption,top_k=top_k,threshold=threshold)
             # The ground truth for evaluation is the image corresponding to the BLIP caption
             ground_truth_images = df[df['blip_caption'] == blip_caption]['image'].unique().tolist()
@@ -93,18 +106,7 @@ class Faiss_CLIP_Retrieval(IRetrieval):
         
         return precision, recall
     
-    def get_nearest_images_cos_sim(self, query,top_k,threshold):
-        k=2
-        self.similarities = []
-        self.retrieved= []
-        self.image_embeddings=[]
-        self.difference = 1
-        while self.difference > threshold and k<top_k:
-            del self.similarities, self.retrieved,self.image_embeddings
-            k= k+1
-            self.similarities, self.retrieved, self.image_embeddings = self.search(query, k) 
-            self.difference = self.similarities[k-1]/self.similarities[0] 
-        return self.similarities, self.retrieved, self.image_embeddings
+    
 
 
     

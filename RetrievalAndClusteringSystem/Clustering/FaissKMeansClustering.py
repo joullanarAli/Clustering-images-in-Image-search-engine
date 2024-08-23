@@ -5,7 +5,7 @@ import os
 from PIL import Image
 import numpy as np
 import shutil
-
+from RetrievalAndClusteringSystem.constants_paths import IMAGES_DATASET
 from sklearn.model_selection import ParameterGrid
 
 class FaissKMeansClustering(ClusteringInterface,GenericClustering):
@@ -49,19 +49,7 @@ class FaissKMeansClustering(ClusteringInterface,GenericClustering):
         os.makedirs(root_folder, exist_ok=True)
 
         self.save_clustered_images(image_paths, root_folder)
-        # for i in range(self.n_clusters):
-        #     os.makedirs(os.path.join(root_folder, f'cluster_{i}'), exist_ok=True)
-
-        # # Save images to the corresponding folders
-        # for idx, cluster in enumerate(labels):
-        #     image_path = os.path.join('.\\Dataset\\FlickrDataset\\Images', image_paths[idx])
-        #     image = Image.open(image_path)
-
-        #     save_path = os.path.join(root_folder, f'cluster_{cluster}', os.path.basename(image_path))
-        #     image.save(save_path)
-        #     print(f"Image {image_path} saved to {save_path}")
-
-        # print("Images have been clustered and saved.")
+        
 
 
     def save_clustered_images(self, image_paths, output_dir):
@@ -73,7 +61,7 @@ class FaissKMeansClustering(ClusteringInterface,GenericClustering):
 
         for idx, cluster_id in enumerate(self.labels):
             try:
-                src_image_path = '.\\RetrievalAndClusteringSystem\\Dataset\\FlickrDataset\\Images\\'+image_paths[idx]
+                src_image_path = IMAGES_DATASET+image_paths[idx]
                 cluster_dir = os.path.join(output_dir, f'cluster_{cluster_id}')
                 dst_image_path = os.path.join(cluster_dir, os.path.basename(src_image_path))
                 shutil.copy(src_image_path, dst_image_path)
@@ -129,8 +117,3 @@ class FaissKMeansClustering(ClusteringInterface,GenericClustering):
             except Exception as e:
                 print(f"An error occurred during KMeans training with params {params}: {e}")
         return best_params, best_score, best_labels, best_centroids
-
-
-    
-        # Assign best labels to the DataFrame
-        #samples_df['cluster_label'] = best_labels

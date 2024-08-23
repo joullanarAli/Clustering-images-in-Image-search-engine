@@ -7,6 +7,7 @@ from RetrievalAndClusteringSystem.ModelsUsage.ModelReader.sen_sim_sem_search_rea
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import normalize
 from RetrievalAndClusteringSystem.DataPreprocessing.Preprocess import PreprocessData
+from RetrievalAndClusteringSystem.constants_paths import PRPROCESS_TFIDF_VECTORIZER, DATASET_DIR, RETRIEVED_IMG
 import pandas as pd
 import pandas as pd
 from PIL import Image
@@ -61,12 +62,12 @@ class GenericIndexer(IndexingInterface,IndexingEvaluationInterface,ABC):
     def getSamplesDF(self):
         return self.samples_df
 
-    def save_to_retrieved_folder(self,dataset):
+    def save_to_retrieved_folder(self,dataset='flickr'):
         
         if dataset == 'flickr':
-            dataset_folder = 'FlickrDataset'
-        images_folder = '.\\Dataset\\'+dataset_folder+'\\Images'
-        retrieved_folder = '.\\static\\retrieved_faiss'
+            
+            images_folder = DATASET_DIR+'\\Images'
+            retrieved_folder = RETRIEVED_IMG
 
         # Ensure the retrieved_faiss directory exists
         os.makedirs(retrieved_folder, exist_ok=True)
@@ -165,7 +166,7 @@ class GenericIndexer(IndexingInterface,IndexingEvaluationInterface,ABC):
             data_processor = PreprocessData()
             query = data_processor.preprocess_text(query)
             # Create TF-IDF vectorizer
-            vectorizer = joblib.load('.\\preprocessed_tfidf_vectorizer.pkl')
+            vectorizer = joblib.load(PRPROCESS_TFIDF_VECTORIZER)
             tfidf_query_embeddings = vectorizer.transform([query]).toarray()
 
             # Normalize TF-IDF embeddings

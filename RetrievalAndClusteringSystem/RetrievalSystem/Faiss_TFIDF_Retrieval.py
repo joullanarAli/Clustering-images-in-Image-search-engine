@@ -2,6 +2,7 @@ from RetrievalSystem.IRetrieval import IRetrieval
 from Indexing.faiss_indexer import faiss_indexer
 from DataPreprocessing.Preprocess import PreprocessData
 from sklearn.feature_extraction.text import TfidfVectorizer
+from RetrievalAndClusteringSystem.constants_paths import PREPROCESS_EMBED_TFIDF_DATA,PRPROCESS_TFIDF_VECTORIZER
 from sklearn.preprocessing import normalize
 import joblib
 import faiss
@@ -15,7 +16,7 @@ class Faiss_TFIDF_Retrieval(IRetrieval):
 
     
     def search(self, query,image_paths,captions,dataset_folder,top_k):
-        normalized_tfidf_embeddings = np.load('.\\Dataset\\FlickrDataset\\TFIDF_embeddings\\preprocessed_normalized_tfidf_embeddings.npy')
+        normalized_tfidf_embeddings = np.load(PREPROCESS_EMBED_TFIDF_DATA)
         faiss_tfidf_index = faiss_indexer(image_paths,captions)
         faiss_tfidf_index.create_index(normalized_tfidf_embeddings)
         
@@ -23,7 +24,7 @@ class Faiss_TFIDF_Retrieval(IRetrieval):
         query = data_processor.preprocess_text(query)
 
         # Load the vectorizer used for creating the TF-IDF embeddings
-        vectorizer = joblib.load('.\\preprocessed_tfidf_vectorizer.pkl')
+        vectorizer = joblib.load(PRPROCESS_TFIDF_VECTORIZER)
         tfidf_query_embedding = vectorizer.transform([query]).toarray()
 
         similarities = []

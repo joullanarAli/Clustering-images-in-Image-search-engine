@@ -1,11 +1,11 @@
 from transformers import CLIPProcessor, CLIPModel
 from RetrievalAndClusteringSystem.ModelsUsage.ModelReader.IModelReader import IModelReader
-
+from RetrievalAndClusteringSystem.constants_paths import CLIP_MODEL
 class CLIP_reader(IModelReader):
 
 
     def __init__(self):
-        self.model_path = ".\\.\\RetrievalAndClusteringSystem\\PretrainedModels\\ImageCaptioning_models\\CLIP_model"
+        self.model_path = CLIP_MODEL
         
 
     def readModel(self):

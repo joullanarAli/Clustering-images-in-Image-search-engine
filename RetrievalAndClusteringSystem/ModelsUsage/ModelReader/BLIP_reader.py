@@ -1,11 +1,11 @@
 from transformers import BlipProcessor, BlipForConditionalGeneration
 from RetrievalAndClusteringSystem.ModelsUsage.ModelReader.IModelReader import IModelReader
-
+from RetrievalAndClusteringSystem.constants_paths import BLIP_MODEL
 class BLIP_reader(IModelReader):
 
 
     def __init__(self):
-        self.model_path = ".\\.\\PretrainedModels\\ImageCaptioning_models\\BLIP_model"
+        self.model_path = BLIP_MODEL
         
 
     def readModel(self):

@@ -1,12 +1,12 @@
 from RetrievalAndClusteringSystem.ModelsUsage.Embeddings.Embeddings import Embeddings
 from RetrievalAndClusteringSystem.ModelsUsage.ModelReader.IModelReader import IModelReader
 from transformers import AutoTokenizer, AutoModel
-
+from RetrievalAndClusteringSystem.constants_paths import SEN_MODEL
 class sen_sim_sem_search_reader(Embeddings,IModelReader):
 
 
     def __init__(self):
-        self.model_path = ".\\.\\RetrievalAndClusteringSystem\\PretrainedModels\\model"
+        self.model_path = SEN_MODEL
         
 
     def readModel(self):

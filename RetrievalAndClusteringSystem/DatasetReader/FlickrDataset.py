@@ -1,4 +1,5 @@
 from RetrievalAndClusteringSystem.DatasetReader.IDataset_reader import IDataset_reader
+from RetrievalAndClusteringSystem.constants_paths import CAPTIONS_DATASET , BLIP_DATASET, BLIP_DETAILED_DATASET
 import numpy as np
 import pandas as pd
 
@@ -6,9 +7,9 @@ class FlickrDataset_reader(IDataset_reader):
 
 
     def __init__(self):
-        self.data = '.\\RetrievalAndClusteringSystem\\Dataset\\FlickrDataset\\captions.csv'
-        self.BLIP_data = '.\\RetrievalAndClusteringSystem\\Dataset\\FlickrDataset\\flickr_dataset_with_BLIP_captions.csv'
-        self.BLIP_detailed_data = '.\\RetrievalAndClusteringSystem\\Dataset\\FlickrDataset\\flickr_dataset_with_BLIP_detailed_captions.csv'
+        self.data = CAPTIONS_DATASET
+        self.BLIP_data =  BLIP_DATASET
+        self.BLIP_detailed_data = BLIP_DETAILED_DATASET
         
     def read(self, dataset):
         self.df = pd.read_csv(dataset)

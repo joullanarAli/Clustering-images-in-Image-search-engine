@@ -3,7 +3,7 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from string import punctuation
-
+from RetrievalAndClusteringSystem.constants_paths import NLTK_DATA_PATH
 
 class PreprocessData():
 
@@ -22,7 +22,6 @@ class PreprocessData():
     def remove_punkt(self, tokens):
         # Remove punctuation from tokens
         tokens_without_punkt = [token for token in tokens if token not in punctuation]
-        #print("Tokens without punctuation:", tokens_without_punkt)
         return tokens_without_punkt
     
     def to_lower(self, text):
@@ -33,7 +32,7 @@ class PreprocessData():
 
 
         # Add your local nltk_data path
-        nltk_data_path = 'D:\\nltk_data'  
+        nltk_data_path = NLTK_DATA_PATH 
         if nltk_data_path not in nltk.data.path:
             nltk.data.path.append(nltk_data_path)
         # Convert to lowercase
