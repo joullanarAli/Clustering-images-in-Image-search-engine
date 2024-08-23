@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Search</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="../static/login.css">
+</head>
+<body>
+    <nav>
+        <ul class="sidebar">
+            <li onclick="hideSidebar()"><a href ="#"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#8978f1"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg></a></li>
+            <li><a href ="../static/index.html">Log In</a></li>
+            <!-- <li><a href ="#">Register</a></li> -->
+        </ul>
+        <ul>
+            <li><a href ="../static/index.html">Image Search Engine</a></li>
+            <li class="hideOnMobile"><a class="btnlogin-popup" href ="#">Log In</a></li>
+            <!-- <li class="hideOnMobile"><a href ="#">Register</a></li> -->
+            <li class= "menu-Button" onclick="showSidebar()"><a href ="#"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#8978f1"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg></a></li>
+        </ul>
+    </nav>
+    <div class="container" id="search">
+        
+        <h1>Image Search</h1>
+        <input type="text" id="searchQuery" placeholder="Enter search query">
+        <button onclick="searchImages()">Search</button>
+        
+        
+    </div>
+    <div class="wrapper-container">
+        <div class="wrapper">
+            <span class="icon-close">
+                <ion-icon name="close-outline"></ion-icon>
+            </span>
+            <div class="form-box login">
+                <h2>Login</h2>
+                <form action="#">
+                    <div class="input-box">
+                        <span class="icon">
+                            <ion-icon name="mail-outline"></ion-icon>
+                        </span>
+                        <input type="email" required>
+                        <label >Email</label>
+                    </div>
+                    <div class="input-box">
+                        <span class="icon">
+                            <ion-icon name="lock-closed-outline"></ion-icon>
+                        </span>
+                        <input type="password" required>
+                        <label >Password</label>
+                    </div>
+                    
+                    <button type="submit" class="btn">Log in</button>
+                    <div class="login-register">
+                        <p>Don't Have an account ?
+                            <a href="#" class="register-link">Register</a></p>
+                        </p>
+                    </div>
+                </form>
+            </div> 
+
+            <div class="form-box register">
+                <h2>Registration</h2>
+                <form action="#">
+
+                    <div class="input-box">
+                        <span class="icon">
+                            <ion-icon name="person-circle-outline"></ion-icon>
+                        </span>
+                        <input type="text" required>
+                        <label >Username</label>
+                    </div>
+
+                    <div class="input-box">
+                        <span class="icon">
+                            <ion-icon name="mail-outline"></ion-icon>
+                        </span>
+                        <input type="email" required>
+                        <label >Email</label>
+                    </div>
+                    <div class="input-box">
+                        <span class="icon">
+                            <ion-icon name="lock-closed-outline"></ion-icon>
+                        </span>
+                        <input type="password" required>
+                        <label >Password</label>
+                    </div>
+                    
+                    <div class="input-box">
+                        <span class="icon">
+                            <ion-icon name="lock-closed-outline"></ion-icon>
+                        </span>
+                        <input type="password" required>
+                        <label >Confirm Password</label>
+                    </div>
+
+                    <button type="submit" class="btn">Sign Up</button>
+                    <div class="login-register">
+                        <p>Already have an account ?
+                            <a href="#" class="login-link">Login</a></p>
+                        </p>
+                    </div>
+                </form>
+            </div> 
+        </div>
+    </div>
+    <script src="../static/login.js"></script>
+    <script src="../static/script.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    
+    
+</body>
+</html>
