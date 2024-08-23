@@ -13,6 +13,7 @@ else:
     current_dir = os.getcwd()
 
 sys.path.append(os.path.abspath(os.path.join(current_dir, '..')))
+from constants_paths import CAPTIONS_DATASET, NORM_EMBED_TFIDF_DATA, PREPROCESS_EMBED_TFIDF_DATA
 sys.path.append(os.path.abspath(os.path.join(current_dir, '..', 'DataPreprocessing')))
 sys.path.append(os.path.abspath(os.path.join(current_dir, '..', 'Dataset')))
 
@@ -21,7 +22,7 @@ os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 from DataPreprocessing.Preprocess import PreprocessData
 
 # Load CSV file
-df = pd.read_csv('Dataset\\FlickrDataset\\captions.csv')
+df = pd.read_csv(CAPTIONS_DATASET)
 
 image_paths = df['image'].tolist()
 captions = df['caption'].tolist()
@@ -47,5 +48,5 @@ normalized_tfidf_embeddings = normalize(tfidf_embeddings, norm='l2')
 joblib.dump(vectorizer, '.\\preprocessed_tfidf_vectorizer.pkl')
 
 # Save normalized TF-IDF embeddings
-#np.save('.\\Dataset\\FlickrDataset\\TFIDF_embeddings\\normalized_tfidf_embeddings.npy', normalized_tfidf_embeddings)
+np.save(PREPROCESS_EMBED_TFIDF_DATA, normalized_tfidf_embeddings)
 print("Normalized TF-IDF embeddings were saved successfully!")

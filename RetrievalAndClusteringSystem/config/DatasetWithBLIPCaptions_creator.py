@@ -8,9 +8,12 @@ else:
     current_dir = os.getcwd()
 
 sys.path.append(os.path.abspath(os.path.join(current_dir, '..')))
-sys.path.append(os.path.abspath(os.path.join(current_dir, '..', 'Dataset')))
-sys.path.append(os.path.abspath(os.path.join(current_dir, '..', 'DatasetReader')))
-sys.path.append(os.path.abspath(os.path.join(current_dir, '..', 'ModelsUsage')))
+
+from constants_paths import PARENT_DIR, DATASET_DIR, DATASET_READER_DIR, MODELS_USAGE_DIR
+sys.path.append(os.path.abspath(os.path.join(current_dir, PARENT_DIR)))
+sys.path.append(os.path.abspath(os.path.join(current_dir, DATASET_DIR)))
+sys.path.append(os.path.abspath(os.path.join(current_dir, DATASET_READER_DIR)))
+sys.path.append(os.path.abspath(os.path.join(current_dir, MODELS_USAGE_DIR)))
 
 from ModelsUsage.ModelReader.BLIP_reader import BLIP_reader
 import pandas as pd
@@ -34,6 +37,6 @@ tqdm.pandas()   # Initialize tqdm for progress bar
 unique_images['blip_caption'] = unique_images['image'].progress_apply(BLIPCaptionGeneratorObj.generateCaption)
 unique_images = pd.DataFrame(unique_images)
 final_dataset = pd.merge(df, unique_images[['image', 'blip_caption']], on='image', how='left')
-
-final_dataset.to_csv('.\\Dataset\\FlickrDataset\\flickr_dataset_with_BLIP_detailedtemp_captions.csv', index=False)
+dataset_path = DATASET_DIR+'flickr_dataset_with_BLIP_detailedtemp_captions.csv'
+final_dataset.to_csv(dataset_path, index=False)
 

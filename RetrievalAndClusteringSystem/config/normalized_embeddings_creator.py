@@ -8,6 +8,7 @@ else:
     current_dir = os.getcwd()
 
 sys.path.append(os.path.abspath(os.path.join(current_dir, '..')))
+from constants_paths import CAPTIONS_DATASET , SEN_MODEL, NORM_EMBED_SEN_DATA, PREPROCESS_EMBED_SEN_DATA 
 sys.path.append(os.path.abspath(os.path.join(current_dir, '..', 'DataPreprocessing')))
 sys.path.append(os.path.abspath(os.path.join(current_dir, '..', 'Dataset')))
 sys.path.append(os.path.abspath(os.path.join(current_dir, '..', 'PretrainedModels')))
@@ -20,7 +21,7 @@ from transformers import AutoTokenizer, AutoModel
 from DataPreprocessing.Preprocess import PreprocessData
 
 # Load CSV file
-df = pd.read_csv('Dataset\\FlickrDataset\\captions.csv')
+df = pd.read_csv(CAPTIONS_DATASET)
 
 image_paths = df['image'].tolist()
 captions = df['caption'].tolist()
@@ -40,7 +41,7 @@ def normalize_embeddings(embeddings):
     return normalized_embeddings
 
 # Specify the path to your saved model directory
-model_path = "PretrainedModels\\model"
+model_path = SEN_MODEL
 
 # Load the tokenizer from the local directory
 tokenizer = AutoTokenizer.from_pretrained(model_path)
@@ -66,6 +67,6 @@ def get_batch_embeddings(text_list, batch_size=32):
 embeddings = get_batch_embeddings(preprocessed_captions)
 normalized_embeddings = normalize_embeddings(embeddings)
 # Save normalized_embeddings
-np.save('.\\preprocessed_normalized_embeddings.npy', normalized_embeddings)
+np.save(PREPROCESS_EMBED_SEN_DATA, normalized_embeddings)
 print("Normalized embeddings was saved successfully!")
 
