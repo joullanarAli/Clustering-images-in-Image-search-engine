@@ -1,3 +1,13 @@
+import sys
+import os
+if '__file__' in globals():
+    current_dir = os.path.dirname(__file__)
+else:
+    current_dir = os.getcwd()
+
+sys.path.append(os.path.abspath(os.path.join(current_dir, '..')))
+sys.path.append(os.path.abspath(os.path.join(current_dir, '..', 'RetrievalAndClusteringSystem')))
+
 from fastapi import FastAPI,HTTPException
 from typing import List, Dict
 from RetrievalAndClusteringSystem.DatasetReader.FlickrDataset import FlickrDataset_reader
@@ -12,15 +22,17 @@ import numpy as np
 from fastapi.staticfiles import StaticFiles
 import logging
 from fastapi.responses import JSONResponse
-import os
+
 import torch
 from fastapi.middleware.cors import CORSMiddleware
-import sys
+
 
 import uvicorn
 
+
 if __name__ == "__main__":
     uvicorn.run("main:app", host="127.0.0.1", port=5000, reload=True)
+
 
 app = FastAPI()
 from fastapi.middleware.cors import CORSMiddleware
