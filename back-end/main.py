@@ -46,6 +46,7 @@ app.add_middleware(
 
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -54,13 +55,14 @@ logger = logging.getLogger(__name__)
 def read_root():
     with open("static/index.html") as f:
         return f.read()
-
+# search api to return clusters
 @app.get('/search')
 def search_images(query: str):
-    print('hello')
-    clusters = get_similar_images(query)
+    n_clusters = 2
+    k=500
+    clusters = get_similar_images(query,n_clusters,k)
     return {"query": query, "clusters": clusters}
-
+# get cluster api to return the images in the cluster
 @app.get("/cluster")
 async def get_cluster(cluster: str):
     cluster_dir = os.path.join("static", "clusters", f"cluster_{cluster}")
@@ -71,66 +73,12 @@ async def get_cluster(cluster: str):
     
     return JSONResponse({"images": images})
 
-
-
-
-
-
-# def get_similar_images(query: str):
-#     dataset = FlickrDataset_reader()
-#     df, image_paths, captions = dataset.readDataset()
-
-#     distance_metrice = 'cos_similarity'
-#     sen_system = Faiss_Sen_Retrieval(distance_metrice)
-#     dataset_folder = 'flickr'
-#     faiss_sen_index, similarities, indices, retrieved_embeddings = sen_system.search(query, image_paths, captions, dataset_folder)
-
-#     # Get clip embeddings
-#     clip_model = CLIP_reader()
-#     processor, model = clip_model.readModel()
-#     clip_embeddings = torch.load('image_embeddings.pt').numpy()  # Adjust this as necessary
-
-#     # Reshape and align embeddings
-#     if len(retrieved_embeddings.shape) == 3:
-#         retrieved_embeddings = retrieved_embeddings.squeeze(0)
-
-#     # Ensure embeddings are aligned
-#     if clip_embeddings.shape[1] != retrieved_embeddings.shape[1]:
-#         raise ValueError("The dimensions of embeddings do not match.")
-
-#     # Combine embeddings
-#     combined_embeddings = np.vstack((retrieved_embeddings, clip_embeddings))
-
-#     # Continue with clustering and other processing
-#     n_clusters = 7
-#     clusters = {}
-
-#     embedding_dim = combined_embeddings.shape[1]
-#     # clustering_model = FaissKMeansClustering(d=embedding_dim, n_clusters=n_clusters)
-#     # cluster_centers, labels = clustering_model.fit(combined_embeddings)
-#     # clustering_model.cluster_and_save_images(combined_embeddings, image_paths, indices)
-
-#     # # Convert numpy.int64 labels to int
-#     # labels = [int(label) for label in labels]
-
-#     # for label, image_path in zip(labels, images):
-#     #     if label not in clusters:
-#     #         clusters[label] = []
-#     #     clusters[label].append(image_path)
-#     # return clusters
-
-@app.get("/test")
-def test_endpoint():
-    return {"message": "This is a test endpoint"}
-def get_similar_images(query: str):
+# the logic of the retrieval and clustering system
+def get_similar_images(query: str,n_clusters,k,distance_metrice = 'cos_similarity'):
     dataset = FlickrDataset_reader()
     df, image_paths, captions = dataset.readDataset()
-    distance_metrice = 'cos_similarity'
     my_retrieval = My_Retrieval(distance_metrice)
-    k=500
     alpha = 0.5
-    n_clusters = 2
-    #my_retrieval.retrieveAndCluster(image_paths,captions,query,k,alpha,n_clusters)
     cluster_centers, labels, top_images = my_retrieval.retrieveAndCluster(image_paths,captions,query,k,alpha,n_clusters)
     clusters = {}
     for label, image_path in zip(labels, top_images):
@@ -138,53 +86,5 @@ def get_similar_images(query: str):
             clusters[label] = []
         clusters[label].append(image_path)
     return clusters
-
-
-# def get_similar_images(query: str):
-#     dataset = FlickrDataset_reader()
-#     df, image_paths, captions = dataset.readDataset()
-
-#     distance_metrice = 'cos_similarity'
-#     sen_system = Faiss_Sen_Retrieval(distance_metrice)
-#     dataset_folder = 'flickr'
-#     k=500
-#     faiss_sen_index, similarities, indices, retrieved_embeddings = sen_system.search(query, image_paths, captions, k)
-
-#     samples = {
-#         "caption": [captions[i] for i in indices[0]],
-#         "image": [image_paths[i] for i in indices[0]],
-#         "similarities": similarities[0].tolist(),
-#     }
-
-#     images = []
-#     samples_df = pd.DataFrame.from_dict(samples)
-#     samples_df["similarities"] = similarities[0]
-#     samples_df.sort_values("similarities", ascending=False, inplace=True)
-#     for _, row in samples_df.iterrows():
-#         images.append(row.image)
-
-    
-#     n_clusters = 7  
-#     clusters = {}
-
-#     # Ensure retrieved_embeddings is a 2D array
-#     if len(retrieved_embeddings.shape) == 3:
-#         retrieved_embeddings = retrieved_embeddings.reshape(-1, retrieved_embeddings.shape[-1])
-
-#     embedding_dim = retrieved_embeddings.shape[1]
-#     # Initialize and fit the Faiss K-means clustering model
-#     clustering_model = FaissKMeansClustering(d=embedding_dim, n_clusters=n_clusters)
-#     cluster_centers, labels = clustering_model.fit(retrieved_embeddings)
-#     clustering_model.cluster_and_save_images(retrieved_embeddings, images, indices)
-
-#     # Convert numpy.int64 labels to int
-#     labels = [int(label) for label in labels]
-
-#     for label, image_path in zip(labels, images):
-#         if label not in clusters:
-#             clusters[label] = []
-#         clusters[label].append(image_path)
-#     return clusters
-
 
 
