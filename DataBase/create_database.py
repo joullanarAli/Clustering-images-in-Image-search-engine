@@ -28,7 +28,7 @@ class UserRole(Base):
     role_id = Column(Integer, ForeignKey('roles.role_id'), nullable=False)
     user_id = Column(Integer, ForeignKey('users.user_id'), nullable=False)
     user = relationship("User")
-    role = relationship("role")
+    role = relationship("Role")
 
 class SearchHistory(Base):
     __tablename__ = 'search_history'

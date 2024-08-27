@@ -5,7 +5,7 @@ from RetrievalAndClusteringSystem.RetrievalSystem.Faiss_Sen_Retrieval import Fai
 from RetrievalAndClusteringSystem.RetrievalSystem.Fiss_CLIP_Retrieval import Faiss_CLIP_Retrieval
 from RetrievalAndClusteringSystem.DataPreprocessing.Preprocess import PreprocessData
 from RetrievalAndClusteringSystem.Clustering.FaissKMeansClustering import FaissKMeansClustering
-from RetrievalAndClusteringSystem.constants_paths import IMAGE_EMBEDDINGS
+from RetrievalAndClusteringSystem.constants_paths import IMAGE_EMBEDDINGS, CLUSTERS
 import faiss
 import pandas as pd
 import torch
@@ -13,14 +13,12 @@ import numpy as np
 from RetrievalAndClusteringSystem.Indexing.faiss_indexer import faiss_indexer
 class My_Retrieval(IRetrieval):
 
-    def __init__(self,distance_metrice):
+    def __init__(self,distance_metrice='cos_similarity'):
         self.distance_metrice = distance_metrice
         self.embedder = 'sen and clip'
 
     def retrieveAndCluster(self,image_paths,captions,query,k,alpha,n_clusters):
         image_embeddings, top_images=self.search(query,image_paths,captions, k,alpha)
-        # print (len(image_embeddings))
-        # print(len(top_images))
         cluster_centers,labels = self.cluster(image_embeddings,top_images,n_clusters)
         return cluster_centers,labels, top_images
     
@@ -123,7 +121,8 @@ class My_Retrieval(IRetrieval):
         labels = labels.tolist() if isinstance(labels, np.ndarray) else labels
         
         indices = np.argsort(labels).tolist()  # Ensure indices is a list
-        kmeans.cluster_and_save_images(image_embeddings, images, indices, root_folder='static\\clusters')
+        print(CLUSTERS)
+        kmeans.cluster_and_save_images(image_embeddings, images, indices, root_folder=CLUSTERS)
         return cluster_centers, labels
 
 

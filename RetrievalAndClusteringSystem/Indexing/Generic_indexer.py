@@ -203,3 +203,41 @@ class GenericIndexer(IndexingInterface,IndexingEvaluationInterface,ABC):
         print(f"Average Recall: {avg_recall * 100:.2f}%")
 
         return avg_precision, avg_recall
+    
+    def evaluate_my_retrieval(retrieval_system, dataset, k=5, alpha=0.5, n_clusters=10):
+        # Load the dataset
+        df, image_paths, captions, BLIP_captions = dataset.read_BLIPDataset()
+        unique_df = df.drop_duplicates(subset=['image'])
+        BLIP_captions = unique_df['blip_caption']
+        unique_images = unique_df['image']
+
+        # Initialize lists to store precision and recall scores
+        precision_scores = []
+        recall_scores = []
+
+        # Iterate over all BLIP captions and their corresponding true images
+        for i, blip_caption in enumerate(BLIP_captions):
+            query = blip_caption
+            true_image = unique_images.iloc[i]
+            
+            # Use the retrieval system to get top images
+            _, _, retrieved_images = retrieval_system.retrieveAndCluster(image_paths, captions, query, k, alpha, n_clusters)
+
+            # Calculate precision
+            relevant_retrieved = int(true_image in retrieved_images)
+            precision = relevant_retrieved / k
+            precision_scores.append(precision)
+
+            # Calculate recall
+            total_relevant = 1  # Since we are dealing with a single query and its corresponding true_image
+            recall = relevant_retrieved / total_relevant
+            recall_scores.append(recall)
+
+        # Calculate average precision and recall
+        avg_precision = sum(precision_scores) / len(precision_scores)
+        avg_recall = sum(recall_scores) / len(recall_scores)
+
+        print(f"Average Precision: {avg_precision * 100:.2f}%")
+        print(f"Average Recall: {avg_recall * 100:.2f}%")
+
+        return avg_precision, avg_recall

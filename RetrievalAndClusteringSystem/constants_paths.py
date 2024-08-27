@@ -51,5 +51,6 @@ MODELS_USAGE_DIR = os.path.abspath(os.path.join(PARENT_DIR, 'ModelsUsage'))
 MODEL_READER_DIR = os.path.abspath(os.path.join(MODELS_USAGE_DIR,'ModelReader'))
 #SEN_READER = os.path.abspath(os.path.join(MODEL_READER_DIR,'model'))
 
-RETRIEVED_IMG = MODELS_USAGE_DIR = os.path.abspath(os.path.join(PARENT_DIR, '..' , 'static','Retrieved'))
-print(RETRIEVED_IMG)
+RETRIEVED_IMG = os.path.abspath(os.path.join(PARENT_DIR, '..' , 'static','Retrieved'))
+CLUSTERS= os.path.abspath(os.path.join(PARENT_DIR, '..' , 'static','clusters'))
+print('CLUSTERS',CLUSTERS)

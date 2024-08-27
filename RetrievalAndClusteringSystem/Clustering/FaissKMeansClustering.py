@@ -5,7 +5,7 @@ import os
 from PIL import Image
 import numpy as np
 import shutil
-from RetrievalAndClusteringSystem.constants_paths import IMAGES_DATASET
+from RetrievalAndClusteringSystem.constants_paths import IMAGES_DATASET,CLUSTERS
 from sklearn.model_selection import ParameterGrid
 
 class FaissKMeansClustering(ClusteringInterface,GenericClustering):
@@ -20,7 +20,7 @@ class FaissKMeansClustering(ClusteringInterface,GenericClustering):
         self.model.train(data)
         cluster_centers = self.model.centroids
         _, labels = self.model.index.search(data, 1)
-        labels = labels.flatten()
+        #labels = labels.flatten()
         self.labels = labels
         self.cluster_centers = cluster_centers
         return cluster_centers, labels
@@ -35,7 +35,7 @@ class FaissKMeansClustering(ClusteringInterface,GenericClustering):
         print("faiss_K-means Clusters:", self.labels)
         print("faiss_K-means Cluster centers:", self.cluster_centers)
 
-    def cluster_and_save_images(self, embeddings, image_paths, indices, root_folder='static\\clusters'):
+    def cluster_and_save_images(self, embeddings, image_paths, indices, root_folder=CLUSTERS):
         # Ensure embeddings is a 2D array
         if len(embeddings.shape) == 3:
             embeddings = embeddings.reshape(-1, embeddings.shape[-1])
@@ -44,26 +44,29 @@ class FaissKMeansClustering(ClusteringInterface,GenericClustering):
 
         # Fit the Faiss K-means clustering model
         cluster_centers, labels = self.fit(embeddings)
-
+        print(root_folder)
         # Create folders for each cluster
         os.makedirs(root_folder, exist_ok=True)
-
+        
         self.save_clustered_images(image_paths, root_folder)
         
 
 
     def save_clustered_images(self, image_paths, output_dir):
         os.makedirs(output_dir, exist_ok=True)
-
+        
         for cluster_id in range(self.n_clusters):
             cluster_dir = os.path.join(output_dir, f'cluster_{cluster_id}')
             os.makedirs(cluster_dir, exist_ok=True)
-
+        
         for idx, cluster_id in enumerate(self.labels):
             try:
-                src_image_path = IMAGES_DATASET+image_paths[idx]
+                cluster_id = int(cluster_id)
+                src_image_path = IMAGES_DATASET+'\\'+image_paths[idx]
                 cluster_dir = os.path.join(output_dir, f'cluster_{cluster_id}')
+                print(cluster_dir)
                 dst_image_path = os.path.join(cluster_dir, os.path.basename(src_image_path))
+                
                 shutil.copy(src_image_path, dst_image_path)
                 print(f"Image {src_image_path} saved to {dst_image_path}")
             except Exception as e:
