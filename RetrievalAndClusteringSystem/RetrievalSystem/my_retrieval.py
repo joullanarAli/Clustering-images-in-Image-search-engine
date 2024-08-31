@@ -46,9 +46,11 @@ class My_Retrieval(IRetrieval):
     def search(self,query,image_paths,captions,k,alpha,distance_metrice='cos_similarity'):
         sen_retrieval = Faiss_Sen_Retrieval(distance_metrice)
         faiss_index, sen_similarities, indices, sen_retrieved_embeddings = sen_retrieval.search(query, image_paths, captions, k)
+        
         # Step 2: Retrieve results using image similarity (CLIP)
         clip_retrieval = Faiss_CLIP_Retrieval(distance_metrice)
         clip_similarities, clip_indices, image_embeddings = clip_retrieval.search(query, k)
+        
         samples = {
             "indexx": indices[0],
             "caption": [captions[i] for i in indices[0]],
@@ -60,8 +62,11 @@ class My_Retrieval(IRetrieval):
         sen_images=[]
         for row in sen_images_df:
             sen_images.append(row)
+        
         clip_images=clip_indices['image'].unique().tolist()
+        
         mini_sen_images= self.delete_repeated_retrieves(sen_images,clip_images)
+        
         clip_embeddings=torch.load(IMAGE_EMBEDDINGS)
         # Convert clip_embeddings to a NumPy array if necessary
         if isinstance(clip_embeddings, torch.Tensor):
@@ -90,10 +95,14 @@ class My_Retrieval(IRetrieval):
 
         for image in clip_images:
             mini_sen_images.append(image)
+        
         return sen_image_embeddings, mini_sen_images
     
 
     def cluster(self, image_embeddings, images, n_clusters):
+        # Right before clustering
+        print("Number of images passed to clustering:", len(images))
+        print("Number of embeddings passed to clustering:", len(image_embeddings))
         # Convert embeddings to numpy arrays
         processed_embeddings = []
         for embedding in image_embeddings:
@@ -119,9 +128,10 @@ class My_Retrieval(IRetrieval):
         # Ensure types are converted to lists or Python native types
         cluster_centers = cluster_centers.tolist() if isinstance(cluster_centers, np.ndarray) else cluster_centers
         labels = labels.tolist() if isinstance(labels, np.ndarray) else labels
+        # After clustering
         
         indices = np.argsort(labels).tolist()  # Ensure indices is a list
-        print(CLUSTERS)
+        
         kmeans.cluster_and_save_images(image_embeddings, images, indices, root_folder=CLUSTERS)
         return cluster_centers, labels
 

@@ -15,6 +15,7 @@ class Faiss_CLIP_Retrieval(IRetrieval):
         self.embedder = 'clip'
 
     def search(self, query,k=300):
+        print(query)
         self.image_embeddings = torch.load(IMAGE_EMBEDDINGS)
         clip_model = CLIP_reader()
         processor, model = clip_model.readModel()

@@ -13,6 +13,7 @@ class Faiss_Sen_Retrieval(IRetrieval):
 
     
     def search(self, query,image_paths,captions,k):
+        print(query)
         self.normalized_sen_embeddings = np.load(NORM_EMBED_SEN_DATA)
         sen_model = sen_sim_sem_search_reader()
         model, tokenizer = sen_model.readModel()
