@@ -1,10 +1,10 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const query = urlParams.get('query');
-
+    const n_clusters = urlParams.get('n_clusters');
     if (query) {
         try {
-            const response = await fetch(`/search?query=${encodeURIComponent(query)}`);
+            const response = await fetch(`/search?query=${encodeURIComponent(query)}&n_clusters=${n_clusters}`);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }

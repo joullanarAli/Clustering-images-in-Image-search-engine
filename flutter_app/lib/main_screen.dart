@@ -9,6 +9,7 @@ class MainScreen extends StatefulWidget {
 }
 class _MainScreenState extends State<MainScreen> {
   String _searchQuery = '';
+  int _selectedClusterCount = 2;
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
@@ -41,13 +42,33 @@ class _MainScreenState extends State<MainScreen> {
 
                 ),
                 const SizedBox(height: 20),
+                // Dropdown to select the number of clusters
+                DropdownButton<int>(
+                  value: _selectedClusterCount,
+                  items: <int>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10] // Options for clusters
+                      .map<DropdownMenuItem<int>>((int value) {
+                    return DropdownMenuItem<int>(
+                      value: value,
+                      child: Text('$value clusters'),
+                    );
+                  }).toList(),
+                  onChanged: (int? newValue) {
+                    setState(() {
+                      _selectedClusterCount = newValue!;
+
+                    });
+                  },
+                ),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     if (_searchQuery.isNotEmpty) {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ResultsScreen(query: _searchQuery),
+                          builder: (context) => ResultsScreen(
+                              query: _searchQuery,
+                              clusterCount: _selectedClusterCount,),
                         ),
                       );
                     } else {

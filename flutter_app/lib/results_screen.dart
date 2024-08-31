@@ -5,8 +5,10 @@ import 'cluster_screen.dart'; // Import the ClusterScreen
 
 class ResultsScreen extends StatefulWidget {
   final String query;
+  final int x=1;
 
-  const ResultsScreen({Key? key, required this.query}) : super(key: key);
+  final dynamic clusterCount;
+  const ResultsScreen({Key? key, required this.query, required this.clusterCount}) : super(key: key);
 
   @override
   _ResultsScreenState createState() => _ResultsScreenState();
@@ -24,7 +26,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
 
   Future<void> _fetchResults() async {
     try {
-      final url = Uri.parse('http://10.0.2.2:5000/search?query=${widget.query}');
+      final url = Uri.parse('http://10.0.2.2:5000/search?query=${widget.query}&n_clusters=${widget.clusterCount}');
 
       final response = await http.get(url);
 
@@ -95,7 +97,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Cluster $clusterKey',
+                    'Cluster ${int.parse(clusterKey)+1}',
                     style: Theme.of(context).textTheme.displayLarge,
                   ),
                   const SizedBox(height: 10),
@@ -109,7 +111,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                     ),
                     itemCount: imagesToShow.length,
                     itemBuilder: (context, imageIndex) {
-                      final imageUrl = 'http://10.0.2.2:8000/static/clusters/cluster_${clusterKey}/${imagesToShow[imageIndex]}';
+                      final imageUrl = 'http://10.0.2.2:5000/static/clusters/cluster_${clusterKey}/${imagesToShow[imageIndex]}';
                       return Image.network(
                         imageUrl,
                         fit: BoxFit.cover,

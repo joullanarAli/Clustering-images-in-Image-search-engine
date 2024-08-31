@@ -20,7 +20,7 @@ from RetrievalAndClusteringSystem.RetrievalSystem.my_retrieval import My_Retriev
 from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
-
+from typing import Optional
 from DataBase.create_database import SessionLocal, User  # Import SQLAlchemy setup and models
 from schemas import UserCreate, UserLogin, UserResponse  # Import Pydantic schemas
 import pandas as pd
@@ -107,8 +107,9 @@ def read_root():
         return f.read()
 # search api to return clusters
 @app.get('/search')
-def search_images(query: str):
-    n_clusters = 2
+def search_images(query: str, n_clusters: Optional[int] = 2):
+    #n_clusters = 2
+    print(query)
     k=300
     clusters = get_similar_images(query,n_clusters,k)
     return {"query": query, "clusters": clusters}

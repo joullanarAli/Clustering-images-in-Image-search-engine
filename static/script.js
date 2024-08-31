@@ -29,11 +29,17 @@
 //         }
 
 async function searchImages() {
+    // Correctly get the value of the query input
     const query = document.getElementById('searchQuery').value;
-    
-    // Redirect to a new page with the search query as a parameter
-    window.location.href = `../static/results.html?query=${encodeURIComponent(query)}`;
+    console.log(query)
+    // Get the selected value for the number of clusters
+    var clusterSelect = document.getElementById("clusterSelect");
+    var n_clusters = clusterSelect.options[clusterSelect.selectedIndex].value;
+
+    // Ensure query value is correctly passed and redirect to results page with parameters
+    window.location.href = `../static/results.html?query=${encodeURIComponent(query)}&n_clusters=${n_clusters}`;
 }
+
 
 function showSidebar(){
     const sidebar = document.querySelector('.sidebar')

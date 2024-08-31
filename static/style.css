@@ -149,4 +149,27 @@ button:hover{
     background-color: #8978f1;
     color: white;
 }
+#clusterSelect{
+    color: #8978f1;
+    background-color: #F5F6FD;
+    width: 120px;
+    height: 50px;
+    border-radius: 10px;
+    border-style: double;
+    border-color: #8978f1;
+    font-size: large;
 
+}
+#clusterSelect option{
+    color: #8978f1;
+}
+#clusterSelect option:hover{
+    color: #8978f1;
+    background-color: #8978f1;
+}
+#clusterSelect:focus{
+    border-color: #8978f1;
+    outline: none;
+    color: #8978f1;
+    border-style: double;
+}

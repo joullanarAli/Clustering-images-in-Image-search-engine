@@ -19,22 +19,15 @@ class BaseScreen extends StatelessWidget {
         backgroundColor: const Color(0xFF8978F1),
         actions: [
           IconButton(
-            icon: const Icon(Icons.login,
+            icon: const Icon(Icons.logout,
               color: Colors.white,
               weight: 200,
             ),
             onPressed: () {
-              Navigator.pushNamed(context, '/login');
+              Navigator.pushNamed(context, '/');
             },
           ),
-          IconButton(
-            icon: const Icon(Icons.app_registration,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.pushNamed(context, '/register');
-            },
-          ),
+
         ],
       ),
       drawer: Drawer(
@@ -57,7 +50,7 @@ class BaseScreen extends StatelessWidget {
               
             ),
             ListTile(
-              title: const Text('Login',
+              title: const Text('Search History',
                 style: TextStyle(
                   color: Color(0xFF8978F1),
                   fontWeight: FontWeight.bold,
@@ -65,11 +58,11 @@ class BaseScreen extends StatelessWidget {
                 ),
               ),
               onTap: () {
-                Navigator.pushNamed(context, '/login',);
+                Navigator.pushNamed(context, '/history',);
               },
             ),
             ListTile(
-              title: const Text('Register',
+              title: const Text('Logout',
                   style: TextStyle(
                     color: Color(0xFF8978F1),
                     fontWeight: FontWeight.bold,
@@ -77,7 +70,7 @@ class BaseScreen extends StatelessWidget {
                   ),
                 ),
               onTap: () {
-                Navigator.pushNamed(context, '/register');
+                Navigator.pushNamed(context, '/');
               },
             ),
           ],

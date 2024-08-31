@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'login.dart';
 import 'main_screen.dart';
 import 'cluster_screen.dart';
 import 'results_screen.dart';
@@ -78,8 +79,9 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => MainScreen(),
-        '/results': (context) => ResultsScreen(query: ModalRoute.of(context)!.settings.arguments as String),
+        '/':(context) => loginScreen(),
+        '/home': (context) => MainScreen(),
+        '/results': (context) => ResultsScreen(query: ModalRoute.of(context)!.settings.arguments as String, clusterCount: ModalRoute.of(context)!.settings.arguments ,),
     '/cluster': (context) {
     final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     return ClusterScreen(

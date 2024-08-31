@@ -28,7 +28,7 @@ class ClusterScreen extends StatelessWidget {
         ),
         itemCount: images.length,
         itemBuilder: (context, index) {
-          final imageUrl = 'http://10.0.2.2:8000/static/clusters/cluster_${clusterKey}/${images[index]}';
+          final imageUrl = 'http://10.0.2.2:5000/static/clusters/cluster_${clusterKey}/${images[index]}';
           return Image.network(
             imageUrl,
             fit: BoxFit.cover,
